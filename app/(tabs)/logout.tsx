@@ -12,12 +12,12 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { auth } from "../service/firebaseConfig";
+import { auth } from "../../service/firebaseConfig";
 import {
-  signOut as firebaseSignOut,
   updateProfile,
   updateEmail,
 } from "firebase/auth";
+import { useAuth } from "../../src/context/AuthContext";
 
 type SafeProfile = {
   uid?: string;
@@ -73,6 +73,7 @@ function buildSafeProfile(stored: any): SafeProfile {
 
 export default function LogoutScreen() {
   const router = useRouter();
+  const { logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<SafeProfile | null>(null);
 
@@ -170,15 +171,7 @@ export default function LogoutScreen() {
   };
 
   const handleLogout = async () => {
-    try {
-      await firebaseSignOut(auth);
-    } catch (e) {
-      console.log("Erro no signOut (seguindo):", (e as any)?.message || e);
-    } finally {
-      await AsyncStorage.removeItem("@user");
-      setProfile(null);
-      router.replace("/"); 
-    }
+    await logout();
   };
 
   if (loading) {

@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import DevCard from "../components/DevCard";
+import DevCard from "../../components/DevCard";
 
 const profiles = [
   {
     name: "Gabrielly Macedo",
     username: "gabimaced0",
-    image: require("../assets/gabimacedo-pic.png"),
+    image: require("../../assets/gabimacedo-pic.png"),
     linkedin:
       "https://www.linkedin.com/in/gabrielly-macedo-b6138027b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
     github: "https://github.com/gabimaced0",
@@ -15,7 +15,7 @@ const profiles = [
   {
     name: "Fernando Aguiar",
     username: "fernando1211",
-    image: require("../assets/fernandoaguiar-pic.jpg"),
+    image: require("../../assets/fernandoaguiar-pic.jpg"),
     linkedin:
       "https://www.linkedin.com/in/fernando-henrique-vilela-aguiar-322aa2301/",
     github: "https://github.com/fernando1211",
@@ -23,7 +23,7 @@ const profiles = [
   {
     name: "Rafael Magalhães ",
     username: "RafaMacoto",
-    image: require("../assets/rafamocoto.jpg"),
+    image: require("../../assets/rafamocoto.jpg"),
     linkedin:
       "http://linkedin.com/in/rafael-macoto",
     github: "https://github.com/RafaMacoto",
@@ -35,7 +35,7 @@ export default function Devs() {
     <View style={styles.background}>
       <SafeAreaView style={styles.container}>
         <Image
-          source={require("../assets/logo.png")}
+          source={require("../../assets/logo.png")}
           style={styles.logo}
           resizeMode="contain"
         />
