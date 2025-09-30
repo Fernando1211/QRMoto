@@ -20,7 +20,6 @@ type Moto = {
   problema: string;
   placa: string;
   alaId?: number;
-  id_tag?: string; // <- novo campo
 };
 
 type Ala = {
@@ -39,7 +38,6 @@ export default function Cadastro() {
     problema: '',
     placa: '',
     alaId: undefined,
-    id_tag: '',
   });
 
   const [alas, setAlas] = useState<Ala[]>([]);
@@ -104,33 +102,24 @@ export default function Cadastro() {
       problema: '',
       placa: '',
       alaId: undefined,
-      id_tag: '',
     });
   };
 
   const cadastrarMoto = async () => {
     try {
-      // gera id_tag automático
-      const motoComIdTag = { 
-        ...moto, 
-        id_tag: moto.id_tag || Date.now().toString(),
-        ala: { id: moto.alaId }
-      };
-
       const response = await fetch('http://10.0.2.2:8080/motos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(motoComIdTag),
+        body: JSON.stringify(moto),
       });
 
       if (response.ok) {
         Alert.alert('Sucesso', 'Moto cadastrada com sucesso!');
-        await AsyncStorage.setItem('ultimaMoto', JSON.stringify(motoComIdTag));
-        setUltimaMoto(motoComIdTag);
         limparCampos();
         listarMotos();
       } else {
-        Alert.alert('Erro', 'Erro ao cadastrar a moto');
+        const text = await response.text();
+        Alert.alert('Erro', `Erro ao cadastrar a moto: ${text}`);
       }
     } catch (error) {
       Alert.alert('Erro', 'Erro na requisição');
@@ -148,10 +137,7 @@ export default function Cadastro() {
       const response = await fetch(`http://10.0.2.2:8080/motos/${motoEditada.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...motoEditada,
-          ala: { id: motoEditada.alaId },
-        }),
+        body: JSON.stringify(motoEditada),
       });
 
       if (response.ok) {
@@ -163,7 +149,8 @@ export default function Cadastro() {
         await salvarMotosLocal(novaLista);
         limparCampos();
       } else {
-        Alert.alert('Erro', 'Erro ao editar a moto');
+        const text = await response.text();
+        Alert.alert('Erro', `Erro ao editar a moto: ${text}`);
       }
     } catch (error) {
       console.error('Erro ao editar moto:', error);
@@ -184,7 +171,8 @@ export default function Cadastro() {
         setListaMotos(novaLista);
         await salvarMotosLocal(novaLista);
       } else {
-        Alert.alert('Erro', 'Erro ao excluir moto');
+        const text = await response.text();
+        Alert.alert('Erro', `Erro ao excluir moto: ${text}`);
       }
     } catch (error) {
       console.error('Erro ao excluir moto:', error);
@@ -262,7 +250,6 @@ export default function Cadastro() {
             ))}
             <Text style={styles.previewText}>Status: {m.status}</Text>
             <Text style={styles.previewText}>Ala ID: {m.alaId ?? '---'}</Text>
-            <Text style={styles.previewText}>ID_TAG: {m.id_tag ?? '---'}</Text>
 
             <View style={{ flexDirection: 'row', gap: 8, marginTop: 6 }}>
               <TouchableOpacity onPress={() => setMoto(m)} style={styles.editButton}>

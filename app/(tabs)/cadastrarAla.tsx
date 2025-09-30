@@ -18,7 +18,7 @@ export default function CadastroAla() {
   // Função para carregar a lista de alas
   const carregarAlas = async () => {
     try {
-      const res = await fetch('http://10.0.2.2:8080/alas'); // URL da API para listar as alas
+      const res = await fetch('http://localhost:5237/api/alas'); // URL da API para listar as alas
       const data = await res.json();
       setAlas(data.content || data); // Armazena as alas na lista
     } catch (err) {
@@ -34,7 +34,7 @@ export default function CadastroAla() {
     }
 
     try {
-      const response = await fetch('http://10.0.2.2:8080/alas', {
+      const response = await fetch('http://localhost:5237/api/alas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ala), // Envia os dados de ala para a API
@@ -62,7 +62,7 @@ export default function CadastroAla() {
     if (!id) return;
 
     try {
-      const response = await fetch(`http://10.0.2.2:8080/alas/${id}`, {
+      const response = await fetch(`http://localhost:5237/api/alas/${id}`, {
         method: 'DELETE',
       });
 
