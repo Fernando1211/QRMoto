@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { signOut as firebaseSignOut, updateProfile } from "firebase/auth";
+import { useRouter } from "expo-router";
 import { auth } from "../../service/firebaseConfig"; // ajuste o caminho se preciso
 
 export type Profile = {
@@ -57,6 +58,7 @@ function toProfile(firebaseUser: any, overrideName?: string): Profile {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLogged, setIsLogged] = useState<boolean | null>(null);
   const [user, setUser] = useState<Profile | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -110,6 +112,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await AsyncStorage.removeItem("@user");
     setUser(null);
     setIsLogged(false);
+    router.replace("/");
   };
 
   const updateLocalName = async (newName: string) => {
