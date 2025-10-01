@@ -1,11 +1,22 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 type Ala = {
   id?: number;
   nome: string;
 };
+
+// 👉 Troque pelo IP da sua máquina se rodar em celular físico
+const BASE_URL = 'http://10.0.2.2:5237'; // Android Emulator
 
 export default function CadastroAla() {
   const [ala, setAla] = useState<Ala>({ nome: '' });
@@ -18,11 +29,17 @@ export default function CadastroAla() {
   // Função para carregar a lista de alas
   const carregarAlas = async () => {
     try {
-      const res = await fetch('http://localhost:5237/api/alas'); // URL da API para listar as alas
+      const res = await fetch(`${BASE_URL}/api/alas`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      setAlas(data.content || data); // Armazena as alas na lista
+      console.log('GET /api/alas ->', data);
+
+      // Ajusta caso venha como PagedResponse
+      const list = data.content ?? data.items ?? data.data ?? data;
+      setAlas(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error('Erro ao carregar alas', err);
+      Alert.alert('Erro', 'Não foi possível carregar as alas.');
     }
   };
 
@@ -34,22 +51,24 @@ export default function CadastroAla() {
     }
 
     try {
-      const response = await fetch('http://localhost:5237/api/alas', {
+      const response = await fetch(`${BASE_URL}/api/alas`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(ala), // Envia os dados de ala para a API
+        body: JSON.stringify(ala),
       });
 
       if (response.status === 201) {
         Alert.alert('Sucesso', 'Ala cadastrada com sucesso!');
-        carregarAlas(); // Atualiza a lista de alas
-        setAla({ nome: '' }); // Limpa os campos
+        carregarAlas();
+        setAla({ nome: '' });
       } else {
-        Alert.alert('Erro', 'Erro ao cadastrar a Ala');
+        const text = await response.text();
+        console.error('Erro ao cadastrar:', response.status, text);
+        Alert.alert('Erro', `Falha ao cadastrar (status ${response.status})`);
       }
     } catch (error) {
       console.error('Erro ao cadastrar a ala:', error);
-      Alert.alert('Erro', 'Erro ao cadastrar a ala. Tente novamente.');
+      Alert.alert('Erro', 'Erro de rede. Tente novamente.');
     }
   };
 
@@ -62,19 +81,21 @@ export default function CadastroAla() {
     if (!id) return;
 
     try {
-      const response = await fetch(`http://localhost:5237/api/alas/${id}`, {
+      const response = await fetch(`${BASE_URL}/api/alas/${id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
         Alert.alert('Sucesso', 'Ala excluída com sucesso!');
-        const novaLista = alas.filter((ala) => ala.id !== id);
-        setAlas(novaLista);
+        setAlas(alas.filter((ala) => ala.id !== id));
       } else {
-        Alert.alert('Erro', 'Erro ao excluir a Ala');
+        const text = await response.text();
+        console.error('Erro ao excluir:', response.status, text);
+        Alert.alert('Erro', `Erro ao excluir (status ${response.status})`);
       }
     } catch (error) {
       console.error('Erro ao excluir ala:', error);
+      Alert.alert('Erro', 'Erro de rede ao excluir.');
     }
   };
 
@@ -101,6 +122,9 @@ export default function CadastroAla() {
 
       <View style={styles.previewBox}>
         <Text style={styles.previewTitle}>📄 Lista de Alas:</Text>
+        {alas.length === 0 && (
+          <Text style={{ color: '#777' }}>Nenhuma ala encontrada.</Text>
+        )}
         {alas.map((alaItem, index) => (
           <View key={alaItem.id ?? index} style={{ marginBottom: 12 }}>
             <Text style={styles.previewText}>Nome: {alaItem.nome}</Text>
@@ -110,10 +134,14 @@ export default function CadastroAla() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
-                  Alert.alert('Excluir Ala', 'Tem certeza que deseja excluir esta ala?', [
-                    { text: 'Cancelar', style: 'cancel' },
-                    { text: 'Excluir', onPress: () => excluirAla(alaItem.id), style: 'destructive' },
-                  ])
+                  Alert.alert(
+                    'Excluir Ala',
+                    'Tem certeza que deseja excluir esta ala?',
+                    [
+                      { text: 'Cancelar', style: 'cancel' },
+                      { text: 'Excluir', onPress: () => excluirAla(alaItem.id), style: 'destructive' },
+                    ]
+                  )
                 }
                 style={[styles.editButton, { backgroundColor: '#aa2222' }]}
               >
