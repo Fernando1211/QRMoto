@@ -6,11 +6,11 @@
 - Gabrielly Campos Macedo (558962)
 - Rafael Mocoto Magalhães Seo (554992)
 
-  ##Proposta  funcionalidades
+  ## Proposta  e funcionalidades
 
 A proposta do QRMoto é ser um aplicativo móvel para o gerenciamento de uma frota de motos. A principal inovação do projeto é a utilização de QR Codes para identificar e acessar rapidamente as informações de cada veículo. O aplicativo é construído com tecnologias modernas de desenvolvimento móvel (React Native e Expo), permitindo que funcione tanto em Android quanto em iOS.
 
-Funcionalidades
+## Funcionalidades
 O aplicativo implementa um sistema de CRUD (Criar, Ler, Atualizar, Deletar) completo para as motos, com as seguintes funcionalidades principais:
 
 Cadastro de Motos: Um formulário permite registrar novas motos no sistema, inserindo informações como modelo, status (Disponível, Manutenção, etc.), posição, placa e problemas associados.
