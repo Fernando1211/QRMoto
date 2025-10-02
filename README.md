@@ -25,7 +25,7 @@ Leitura de QR Code: Há uma tela de scanner que utiliza a câmera do celular par
 
 Navegação por Abas: A interface é organizada em abas, separando claramente as principais seções do app: "Cadastro", "Lista" e "Scanner".
 
-Estrutura de pastas
+## Estrutura de pastas
 O projeto segue a estrutura padrão de um aplicativo criado com Expo (React Native), utilizando a navegação baseada em arquivos (File-based routing) do Expo Router. A estrutura principal é a seguinte:
 
 QRMoto/ (Pasta raiz do projeto)
