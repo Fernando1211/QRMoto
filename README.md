@@ -32,17 +32,17 @@ QRMoto/ (Pasta raiz do projeto)
 
 app/: É o coração do aplicativo, onde ficam todas as telas e a lógica de navegação.
 
-    (tabs)/: Diretório especial que define a navegação principal por abas.
+(tabs)/: Diretório especial que define a navegação principal por abas.
 
-    _layout.tsx: Configura o layout das abas (ícones, nomes, etc.).
+_layout.tsx: Configura o layout das abas (ícones, nomes, etc.).
 
-    index.tsx: Corresponde à primeira aba, a tela de Cadastro de Motos.
+index.tsx: Corresponde à primeira aba, a tela de Cadastro de Motos.
 
-    list.tsx: A segunda aba, que lista as motos cadastradas.
+list.tsx: A segunda aba, que lista as motos cadastradas.
 
-      scanner.tsx: A terceira aba, responsável por abrir a câmera para escanear os QR Codes.
+scanner.tsx: A terceira aba, responsável por abrir a câmera para escanear os QR Codes.
 
-    _layout.tsx: Arquivo de layout principal (root) do aplicativo.
+_layout.tsx: Arquivo de layout principal (root) do aplicativo.
 
 modal.tsx: Uma tela modal, provavelmente usada para exibir os detalhes da moto após a leitura de um QR Code.
 
