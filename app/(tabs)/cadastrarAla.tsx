@@ -9,6 +9,8 @@ import {
   Alert,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useThemedStyles, useTheme } from '../../src/context/ThemeContext';
+import { useLanguage } from '../../src/context/LanguageContext';
 
 type Ala = {
   id?: number;
@@ -21,6 +23,9 @@ const BASE_URL = 'http://10.0.2.2:5237'; // Android Emulator
 export default function CadastroAla() {
   const [ala, setAla] = useState<Ala>({ nome: '' });
   const [alas, setAlas] = useState<Ala[]>([]);
+  const styles = useThemedStyles(createStyles);
+  const { translations } = useLanguage();
+  const { theme } = useTheme();
 
   useEffect(() => {
     carregarAlas();
@@ -101,36 +106,36 @@ export default function CadastroAla() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>📋 Cadastro de Ala</Text>
+      <Text style={styles.titulo}>📋 {translations.wingRegistration}</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Digite o nome da Ala"
-        placeholderTextColor="#ccc"
+        placeholder={translations.wingName}
+        placeholderTextColor={theme.colors.textSecondary}
         value={ala.nome}
         onChangeText={(value) => setAla({ nome: value })}
       />
 
       <TouchableOpacity onPress={handleCadastroAla} style={styles.botao}>
-        <Text style={styles.textoBotao}>Cadastrar Ala</Text>
+        <Text style={styles.textoBotao}>{translations.registerWing}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={limparCampos} style={styles.clearButton}>
-        <MaterialIcons name="delete-outline" size={20} color="#fff" />
-        <Text style={styles.clearButtonText}>Limpar</Text>
+        <MaterialIcons name="delete-outline" size={20} color={theme.colors.text} />
+        <Text style={styles.clearButtonText}>{translations.clear}</Text>
       </TouchableOpacity>
 
       <View style={styles.previewBox}>
-        <Text style={styles.previewTitle}>📄 Lista de Alas:</Text>
+        <Text style={styles.previewTitle}>📄 {translations.wingList}:</Text>
         {alas.length === 0 && (
-          <Text style={{ color: '#777' }}>Nenhuma ala encontrada.</Text>
+          <Text style={{ color: theme.colors.textSecondary }}>{translations.noWings}</Text>
         )}
         {alas.map((alaItem, index) => (
           <View key={alaItem.id ?? index} style={{ marginBottom: 12 }}>
             <Text style={styles.previewText}>Nome: {alaItem.nome}</Text>
             <View style={{ flexDirection: 'row', gap: 8, marginTop: 6 }}>
               <TouchableOpacity style={styles.editButton}>
-                <Text style={{ color: '#fff' }}>Editar</Text>
+                <Text style={{ color: theme.colors.text }}>{translations.edit}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
@@ -138,14 +143,14 @@ export default function CadastroAla() {
                     'Excluir Ala',
                     'Tem certeza que deseja excluir esta ala?',
                     [
-                      { text: 'Cancelar', style: 'cancel' },
-                      { text: 'Excluir', onPress: () => excluirAla(alaItem.id), style: 'destructive' },
+                      { text: translations.cancel, style: 'cancel' },
+                      { text: translations.delete, onPress: () => excluirAla(alaItem.id), style: 'destructive' },
                     ]
                   )
                 }
-                style={[styles.editButton, { backgroundColor: '#aa2222' }]}
+                style={[styles.editButton, { backgroundColor: theme.colors.error }]}
               >
-                <Text style={{ color: '#fff' }}>Excluir</Text>
+                <Text style={{ color: theme.colors.buttonText }}>{translations.delete}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -156,39 +161,39 @@ export default function CadastroAla() {
 }
 
 // Styles
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
     padding: 20,
     alignItems: 'center',
   },
   titulo: {
     fontSize: 20,
-    color: '#00BFFF',
+    color: colors.primary,
     fontWeight: 'bold',
     marginBottom: 15,
   },
   input: {
     width: '100%',
-    backgroundColor: '#1a1a1a',
-    borderColor: '#333',
+    backgroundColor: colors.input,
+    borderColor: colors.border,
     borderWidth: 1,
     marginBottom: 10,
     padding: 12,
     borderRadius: 8,
     fontSize: 15,
-    color: '#fff',
+    color: colors.text,
   },
   botao: {
-    backgroundColor: '#00BFFF',
+    backgroundColor: colors.button,
     padding: 14,
     borderRadius: 10,
     width: '100%',
     marginTop: 10,
   },
   textoBotao: {
-    color: '#fff',
+    color: colors.buttonText,
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
@@ -196,38 +201,40 @@ const styles = StyleSheet.create({
   clearButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#444',
+    backgroundColor: colors.surfaceVariant,
     padding: 10,
     borderRadius: 8,
     marginTop: 10,
   },
   clearButtonText: {
-    color: '#fff',
+    color: colors.text,
     marginLeft: 6,
     fontSize: 15,
   },
   previewBox: {
     marginTop: 25,
-    backgroundColor: '#111',
+    backgroundColor: colors.surface,
     padding: 15,
     borderRadius: 10,
     width: '100%',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   previewTitle: {
-    color: '#00BFFF',
+    color: colors.primary,
     fontSize: 15,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   previewText: {
-    color: '#ccc',
+    color: colors.text,
     fontSize: 14,
     marginBottom: 3,
   },
   editButton: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: '#555',
+    backgroundColor: colors.surfaceVariant,
     borderRadius: 6,
   },
 });

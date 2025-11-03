@@ -1,8 +1,9 @@
 import React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity, Linking } from "react-native";
-
+import { useThemedStyles } from "../src/context/ThemeContext";
 
 export default function DevCard(props: any) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View key={props.index} style={styles.card}>
       <View style={styles.userInfo}>
@@ -31,15 +32,17 @@ export default function DevCard(props: any) {
 }
 
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
     card: {
-      backgroundColor: "rgba(0, 0, 0, 0.1)",
+      backgroundColor: colors.surface,
       borderRadius: 16,
       padding: 12,
       marginBottom: 12,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
+      borderWidth: 1,
+      borderColor: colors.border,
     },
     userInfo: {
       flexDirection: "row",
@@ -51,15 +54,14 @@ const styles = StyleSheet.create({
       height: 44,
       borderRadius: 100,
       marginRight: 10,
-
     },
     name: {
-      color: "white",
+      color: colors.text,
       fontWeight: "bold",
       fontSize: 16,
     },
     username: {
-      color: "#ddd",
+      color: colors.textSecondary,
       fontSize: 13,
     },
     links: {

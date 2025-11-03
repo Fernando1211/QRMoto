@@ -12,6 +12,8 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
+import { useThemedStyles, useTheme } from '../../src/context/ThemeContext';
+import { useLanguage } from '../../src/context/LanguageContext';
 
 type Moto = {
   id?: number;
@@ -50,6 +52,9 @@ export default function Cadastro() {
   const [listaMotos, setListaMotos] = useState<Moto[]>([]);
   const [loadingAlas, setLoadingAlas] = useState(false);
   const [loadingMotos, setLoadingMotos] = useState(false);
+  const styles = useThemedStyles(createStyles);
+  const { translations } = useLanguage();
+  const { theme } = useTheme();
 
   useEffect(() => {
     carregarDados();
@@ -299,31 +304,50 @@ export default function Cadastro() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>📋 Cadastro de Moto</Text>
+      <Text style={styles.title}>📋 {translations.motoRegistration}</Text>
 
-      {CAMPOS_FORM.map((field) => (
-        <TextInput
-          key={field}
-          style={styles.input}
-          placeholder={`Digite ${field}`}
-          placeholderTextColor="#999"
-          value={moto[field]}
-          onChangeText={(value) => handleChange(field, value)}
-        />
-      ))}
+      <TextInput
+        style={styles.input}
+        placeholder={translations.model}
+        placeholderTextColor={theme.colors.textSecondary}
+        value={moto.modelo}
+        onChangeText={(value) => handleChange('modelo', value)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder={translations.position}
+        placeholderTextColor={theme.colors.textSecondary}
+        value={moto.posicao}
+        onChangeText={(value) => handleChange('posicao', value)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder={translations.problem}
+        placeholderTextColor={theme.colors.textSecondary}
+        value={moto.problema}
+        onChangeText={(value) => handleChange('problema', value)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder={translations.plate}
+        placeholderTextColor={theme.colors.textSecondary}
+        value={moto.placa}
+        onChangeText={(value) => handleChange('placa', value)}
+      />
 
       {/* STATUS */}
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={moto.status}
           onValueChange={(value) => handleChange('status', value)}
-          dropdownIconColor="#00BFFF"
+          dropdownIconColor={theme.colors.primary}
           style={styles.picker}
         >
-          <Picker.Item label="Selecione o status" value="" color="#999" />
-          {STATUS_OPTIONS.map((status) => (
-            <Picker.Item key={status} label={status} value={status} />
-          ))}
+          <Picker.Item label={translations.selectStatus} value="" color={theme.colors.textSecondary} />
+          <Picker.Item label={translations.available} value="DISPONIVEL" color={theme.colors.text} />
+          <Picker.Item label={translations.maintenance} value="MANUTENCAO" color={theme.colors.text} />
+          <Picker.Item label={translations.unavailable} value="INDISPONIVEL" color={theme.colors.text} />
+          <Picker.Item label={translations.recovery} value="RECUPERACAO" color={theme.colors.text} />
         </Picker>
       </View>
 
@@ -331,19 +355,19 @@ export default function Cadastro() {
       <View style={styles.pickerContainer}>
         {loadingAlas ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color="#00BFFF" />
-            <Text style={styles.loadingText}>Carregando alas...</Text>
+            <ActivityIndicator size="small" color={theme.colors.primary} />
+            <Text style={styles.loadingText}>{translations.loading}</Text>
           </View>
         ) : (
           <Picker
             selectedValue={moto.alaId}
             onValueChange={(value) => handleChange('alaId', value)}
-            dropdownIconColor="#00BFFF"
+            dropdownIconColor={theme.colors.primary}
             style={styles.picker}
           >
-            <Picker.Item label="Selecione a Ala (opcional)" value={undefined} color="#999" />
+            <Picker.Item label={translations.selectWing} value={undefined} color={theme.colors.textSecondary} />
             {alas.map((ala) => (
-              <Picker.Item key={ala.id} label={ala.nome} value={ala.id} />
+              <Picker.Item key={ala.id} label={ala.nome} value={ala.id} color={theme.colors.text} />
             ))}
           </Picker>
         )}
@@ -379,23 +403,23 @@ export default function Cadastro() {
         style={styles.button}
       >
         <Text style={styles.buttonText}>
-          {moto.id ? 'Salvar Alterações' : 'Cadastrar Moto'}
+          {moto.id ? translations.save : translations.registerMoto}
         </Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={limparCampos} style={styles.clearButton}>
-        <MaterialIcons name="delete-outline" size={20} color="#fff" />
-        <Text style={styles.clearButtonText}>Limpar</Text>
+        <MaterialIcons name="delete-outline" size={20} color={theme.colors.text} />
+        <Text style={styles.clearButtonText}>{translations.clear}</Text>
       </TouchableOpacity>
 
       {loadingMotos ? (
-        <ActivityIndicator size="large" color="#00BFFF" style={{ marginTop: 20 }} />
+        <ActivityIndicator size="large" color={theme.colors.primary} style={{ marginTop: 20 }} />
       ) : (
         <View style={styles.previewBox}>
-          <Text style={styles.previewTitle}>📄 Lista de Motos ({listaMotos.length}):</Text>
+          <Text style={styles.previewTitle}>📄 {translations.motoList} ({listaMotos.length}):</Text>
 
           {listaMotos.length === 0 ? (
-            <Text style={styles.emptyText}>Nenhuma moto cadastrada</Text>
+            <Text style={styles.emptyText}>{translations.noMotos}</Text>
           ) : (
             listaMotos.map((m, index) => (
               <View key={m.id ?? index} style={styles.motoCard}>
@@ -417,20 +441,20 @@ export default function Cadastro() {
                     }} 
                     style={styles.editButton}
                   >
-                    <MaterialIcons name="edit" size={16} color="#fff" />
-                    <Text style={styles.actionButtonText}>Editar</Text>
+                    <MaterialIcons name="edit" size={16} color={theme.colors.buttonText} />
+                    <Text style={styles.actionButtonText}>{translations.editMoto}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
                       Alert.alert('Excluir Moto', 'Tem certeza que deseja excluir esta moto?', [
-                        { text: 'Cancelar', style: 'cancel' },
-                        { text: 'Excluir', onPress: () => excluirMoto(m.id), style: 'destructive' },
+                        { text: translations.cancel, style: 'cancel' },
+                        { text: translations.delete, onPress: () => excluirMoto(m.id), style: 'destructive' },
                       ])
                     }
                     style={styles.deleteButton}
                   >
-                    <MaterialIcons name="delete" size={16} color="#fff" />
-                    <Text style={styles.actionButtonText}>Excluir</Text>
+                    <MaterialIcons name="delete" size={16} color={theme.colors.buttonText} />
+                    <Text style={styles.actionButtonText}>{translations.deleteMoto}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -442,40 +466,40 @@ export default function Cadastro() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#000',
+    backgroundColor: colors.background,
     padding: 20,
     alignItems: 'center',
   },
   title: {
     fontSize: 24,
-    color: '#00BFFF',
+    color: colors.primary,
     fontWeight: 'bold',
     marginBottom: 20,
   },
   input: {
     width: '100%',
-    backgroundColor: '#1a1a1a',
-    borderColor: '#333',
+    backgroundColor: colors.input,
+    borderColor: colors.border,
     borderWidth: 1,
     marginBottom: 12,
     padding: 14,
     borderRadius: 8,
     fontSize: 15,
-    color: '#fff',
+    color: colors.text,
   },
   pickerContainer: {
-    backgroundColor: '#1a1a1a',
-    borderColor: '#333',
+    backgroundColor: colors.input,
+    borderColor: colors.border,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 12,
     width: '100%',
   },
   picker: {
-    color: '#fff',
+    color: colors.text,
     backgroundColor: 'transparent',
   },
   loadingContainer: {
@@ -485,13 +509,13 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   loadingText: {
-    color: '#999',
+    color: colors.textSecondary,
     marginLeft: 8,
   },
   warningBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#332200',
+    backgroundColor: colors.warning + '20',
     padding: 10,
     borderRadius: 8,
     marginBottom: 10,
@@ -499,29 +523,29 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   warningText: {
-    color: '#FFA500',
+    color: colors.warning,
     fontSize: 13,
   },
   infoText: {
-    color: '#4CAF50',
+    color: colors.success,
     fontSize: 13,
     marginBottom: 10,
   },
   refreshButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#333',
+    backgroundColor: colors.surfaceVariant,
     padding: 10,
     borderRadius: 8,
     marginBottom: 12,
     gap: 6,
   },
   refreshButtonText: {
-    color: '#fff',
+    color: colors.text,
     fontSize: 14,
   },
   button: {
-    backgroundColor: '#00BFFF',
+    backgroundColor: colors.button,
     padding: 16,
     borderRadius: 8,
     width: '100%',
@@ -529,14 +553,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontWeight: 'bold',
     fontSize: 16,
   },
   clearButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#555',
+    backgroundColor: colors.surfaceVariant,
     padding: 12,
     borderRadius: 8,
     width: '100%',
@@ -545,39 +569,39 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   clearButtonText: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: 'bold',
   },
   previewBox: {
     width: '100%',
-    backgroundColor: '#1a1a1a',
+    backgroundColor: colors.surface,
     padding: 16,
     borderRadius: 8,
-    borderColor: '#333',
+    borderColor: colors.border,
     borderWidth: 1,
   },
   previewTitle: {
     fontSize: 18,
-    color: '#00BFFF',
+    color: colors.primary,
     fontWeight: 'bold',
     marginBottom: 16,
   },
   emptyText: {
-    color: '#999',
+    color: colors.textSecondary,
     textAlign: 'center',
     fontStyle: 'italic',
     marginVertical: 20,
   },
   motoCard: {
-    backgroundColor: '#0a0a0a',
+    backgroundColor: colors.surfaceVariant,
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
-    borderColor: '#222',
+    borderColor: colors.border,
     borderWidth: 1,
   },
   previewText: {
-    color: '#ddd',
+    color: colors.text,
     fontSize: 14,
     marginBottom: 4,
   },
@@ -589,7 +613,7 @@ const styles = StyleSheet.create({
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0066cc',
+    backgroundColor: colors.info,
     padding: 8,
     borderRadius: 6,
     gap: 4,
@@ -599,7 +623,7 @@ const styles = StyleSheet.create({
   deleteButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#cc2222',
+    backgroundColor: colors.error,
     padding: 8,
     borderRadius: 6,
     gap: 4,
@@ -607,7 +631,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   actionButtonText: {
-    color: '#fff',
+    color: colors.buttonText,
     fontSize: 13,
     fontWeight: '600',
   },

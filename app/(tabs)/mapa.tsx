@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useThemedStyles } from '../../src/context/ThemeContext';
 
 const NUM_ROWS = 10;
 const NUM_COLUMNS = 4;
@@ -16,12 +17,13 @@ const generateLabels = (): string[] => {
 const Mapa: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('MANUTENCAO');
   const labels = generateLabels();
+  const styles = useThemedStyles(createStyles);
 
   const renderItem = ({ item }: { item: string }) => {
-    const borderColor = selectedOption === 'MANUTENCAO' ? 'green' : 'red';
+    const borderColor = selectedOption === 'MANUTENCAO' ? styles.successBorder : styles.errorBorder;
 
     return (
-      <View style={[styles.box, { borderColor }]}>
+      <View style={[styles.box, borderColor]}>
         <Text style={styles.text}>{item}</Text>
       </View>
     );
@@ -50,19 +52,22 @@ const Mapa: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.background,
   },
   picker: {
     height: 50,
     width: '100%',
-    color: 'white',
-    backgroundColor: 'black',
-    
+    color: colors.text,
+    backgroundColor: colors.input,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   grid: {
     alignItems: 'center',
@@ -74,12 +79,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 5,
-    backgroundColor: 'black', // mantém o fundo neutro
+    backgroundColor: colors.surface,
   },
   text: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: 'white',
+    color: colors.text,
+  },
+  successBorder: {
+    borderColor: colors.success,
+  },
+  errorBorder: {
+    borderColor: colors.error,
   },
 });
 

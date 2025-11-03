@@ -18,6 +18,8 @@ import {
   updateEmail,
 } from "firebase/auth";
 import { useAuth } from "../../src/context/AuthContext";
+import { useThemedStyles, useTheme } from "../../src/context/ThemeContext";
+import { useLanguage } from "../../src/context/LanguageContext";
 
 type SafeProfile = {
   uid?: string;
@@ -76,6 +78,9 @@ export default function LogoutScreen() {
   const { logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<SafeProfile | null>(null);
+  const styles = useThemedStyles(createStyles);
+  const { translations } = useLanguage();
+  const { theme } = useTheme();
 
   // modal edição
   const [editing, setEditing] = useState(false);
@@ -184,28 +189,28 @@ export default function LogoutScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Perfil</Text>
+      <Text style={styles.title}>{translations.profile}</Text>
 
       {profile ? (
         <View style={styles.card}>
-          <Text style={styles.label}>Nome</Text>
+          <Text style={styles.label}>{translations.name}</Text>
           <Text style={styles.value}>{profile.name || "-"}</Text>
 
-          <Text style={[styles.label, { marginTop: 12 }]}>E-mail</Text>
+          <Text style={[styles.label, { marginTop: 12 }]}>{translations.email}</Text>
           <Text style={styles.value}>{profile.email || "-"}</Text>
 
           <View style={styles.actions}>
             <TouchableOpacity style={[styles.btn, styles.editBtn]} onPress={openEdit}>
-              <Text style={styles.btnText}>Editar</Text>
+              <Text style={styles.btnText}>{translations.edit}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.btn, styles.logoutBtn]} onPress={handleLogout}>
-              <Text style={styles.btnText}>Logout</Text>
+              <Text style={styles.btnText}>{translations.logout}</Text>
             </TouchableOpacity>
           </View>
         </View>
       ) : (
-        <Text style={{ color: "#aaa", textAlign: "center" }}>
+        <Text style={{ color: theme.colors.textSecondary, textAlign: "center" }}>
           Nenhum usuário logado.
         </Text>
       )}
@@ -214,19 +219,19 @@ export default function LogoutScreen() {
       <Modal visible={editing} transparent animationType="fade" onRequestClose={() => setEditing(false)}>
         <View style={styles.modalBackdrop}>
           <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Editar Perfil</Text>
+            <Text style={styles.modalTitle}>{translations.edit} {translations.profile}</Text>
 
             <TextInput
               style={styles.input}
-              placeholder="Nome"
-              placeholderTextColor="#aaa"
+              placeholder={translations.name}
+              placeholderTextColor={theme.colors.textSecondary}
               value={nameInput}
               onChangeText={setNameInput}
             />
             <TextInput
               style={styles.input}
-              placeholder="E-mail"
-              placeholderTextColor="#aaa"
+              placeholder={translations.email}
+              placeholderTextColor={theme.colors.textSecondary}
               keyboardType="email-address"
               autoCapitalize="none"
               value={emailInput}
@@ -234,11 +239,11 @@ export default function LogoutScreen() {
             />
 
             <View style={styles.modalActions}>
-              <TouchableOpacity style={[styles.btn, { backgroundColor: "#333" }]} onPress={() => setEditing(false)}>
-                <Text style={styles.btnText}>Cancelar</Text>
+              <TouchableOpacity style={[styles.btn, { backgroundColor: theme.colors.surfaceVariant }]} onPress={() => setEditing(false)}>
+                <Text style={styles.btnText}>{translations.cancel}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.btn, { backgroundColor: "#00BFFF" }]} onPress={saveEdit}>
-                <Text style={styles.btnText}>Salvar</Text>
+              <TouchableOpacity style={[styles.btn, { backgroundColor: theme.colors.primary }]} onPress={saveEdit}>
+                <Text style={styles.btnText}>{translations.save}</Text>
               </TouchableOpacity>
             </View>
 
@@ -252,30 +257,95 @@ export default function LogoutScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#000", padding: 16 },
-  title: { color: "#fff", fontSize: 22, fontWeight: "bold", marginBottom: 16, textAlign: "center" },
-  card: { backgroundColor: "#1a1a1a", borderRadius: 12, padding: 16 },
-  label: { color: "#9aa0a6", fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 },
-  value: { color: "#fff", fontSize: 16, marginTop: 4 },
-  actions: { flexDirection: "row", justifyContent: "flex-end", gap: 10, marginTop: 16 },
-  btn: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 10 },
-  editBtn: { backgroundColor: "#2b6cb0" },
-  logoutBtn: { backgroundColor: "#e63946" },
-  btnText: { color: "#fff", fontWeight: "700" },
+const createStyles = (colors: any) => StyleSheet.create({
+  container: { 
+    flex: 1, 
+    backgroundColor: colors.background, 
+    padding: 16 
+  },
+  title: { 
+    color: colors.text, 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    marginBottom: 16, 
+    textAlign: "center" 
+  },
+  card: { 
+    backgroundColor: colors.surface, 
+    borderRadius: 12, 
+    padding: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  label: { 
+    color: colors.textSecondary, 
+    fontSize: 12, 
+    textTransform: "uppercase", 
+    letterSpacing: 0.5 
+  },
+  value: { 
+    color: colors.text, 
+    fontSize: 16, 
+    marginTop: 4 
+  },
+  actions: { 
+    flexDirection: "row", 
+    justifyContent: "flex-end", 
+    gap: 10, 
+    marginTop: 16 
+  },
+  btn: { 
+    paddingVertical: 10, 
+    paddingHorizontal: 14, 
+    borderRadius: 10 
+  },
+  editBtn: { 
+    backgroundColor: colors.info 
+  },
+  logoutBtn: { 
+    backgroundColor: colors.error 
+  },
+  btnText: { 
+    color: colors.buttonText, 
+    fontWeight: "700" 
+  },
 
-  modalBackdrop: { flex: 1, backgroundColor: "rgba(0,0,0,0.6)", justifyContent: "center", padding: 16 },
-  modalCard: { backgroundColor: "#1E1E1E", borderRadius: 12, padding: 16 },
-  modalTitle: { color: "#fff", fontSize: 18, fontWeight: "700", marginBottom: 12 },
+  modalBackdrop: { 
+    flex: 1, 
+    backgroundColor: "rgba(0,0,0,0.6)", 
+    justifyContent: "center", 
+    padding: 16 
+  },
+  modalCard: { 
+    backgroundColor: colors.surface, 
+    borderRadius: 12, 
+    padding: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  modalTitle: { 
+    color: colors.text, 
+    fontSize: 18, 
+    fontWeight: "700", 
+    marginBottom: 12 
+  },
   input: {
-    backgroundColor: "#282828",
-    color: "#fff",
+    backgroundColor: colors.input,
+    color: colors.text,
     borderRadius: 10,
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: colors.border,
   },
-  modalActions: { flexDirection: "row", justifyContent: "flex-end", gap: 8 },
-  hint: { color: "#9aa0a6", fontSize: 12, marginTop: 8 },
+  modalActions: { 
+    flexDirection: "row", 
+    justifyContent: "flex-end", 
+    gap: 8 
+  },
+  hint: { 
+    color: colors.textSecondary, 
+    fontSize: 12, 
+    marginTop: 8 
+  },
 });

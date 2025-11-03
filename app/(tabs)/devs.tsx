@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DevCard from "../../components/DevCard";
+import { useThemedStyles } from "../../src/context/ThemeContext";
 
 const profiles = [
   {
@@ -31,6 +32,8 @@ const profiles = [
 ];
 
 export default function Devs() {
+  const styles = useThemedStyles(createStyles);
+  
   return (
     <View style={styles.background}>
       <SafeAreaView style={styles.container}>
@@ -50,10 +53,10 @@ export default function Devs() {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) => StyleSheet.create({
   background: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: colors.background,
   },
   container: {
     flex: 1,
