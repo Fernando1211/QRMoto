@@ -7,20 +7,24 @@ import { registerForPushNotificationsAsync, setupNotificationListeners } from '.
 
 function NotificationSetup() {
   useEffect(() => {
-    // Registra para notificações push quando o app inicia
+    // Registra para notificações quando o app inicia (funciona em emulador também)
     registerForPushNotificationsAsync().then(token => {
       if (token) {
-        console.log('Push notification token:', token);
+        console.log('✅ Push notification token registrado:', token);
+      } else {
+        console.log('📱 Modo emulador - notificações locais ativas');
       }
+    }).catch(error => {
+      console.error('❌ Erro ao registrar notificações:', error);
     });
 
     // Configura listeners para notificações
     const cleanup = setupNotificationListeners(
       (notification) => {
-        console.log('Notification received:', notification);
+        console.log('📬 Notificação recebida:', notification.request.content.title);
       },
       (response) => {
-        console.log('Notification tapped:', response);
+        console.log('👆 Notificação tocada:', response.notification.request.content.title);
       }
     );
 

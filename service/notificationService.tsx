@@ -24,33 +24,42 @@ export interface NotificationData {
 /**
  * Registra o dispositivo para receber notificações push
  * Retorna o token FCM/Expo Push Token
+ * Funciona tanto em dispositivos físicos quanto em emuladores
  */
 export async function registerForPushNotificationsAsync(): Promise<string | null> {
   let token: string | null = null;
 
+  // Configura o canal de notificação para Android (funciona em emulador também)
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: '#FF231F7C',
+      sound: 'default',
+      enableVibrate: true,
     });
   }
 
+  // Solicita permissões (funciona em emulador também)
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+
+  if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+
+  if (finalStatus !== 'granted') {
+    console.log('⚠️ Permissão de notificação negada');
+    console.log('📱 Notificações locais ainda funcionarão no emulador');
+    return null;
+  }
+
+  console.log('✅ Permissão de notificação concedida');
+
+  // Tenta obter token de push (só funciona em dispositivo físico, mas não bloqueia notificações locais)
   if (Device.isDevice) {
-    const { status: existingStatus } = await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-
-    if (finalStatus !== 'granted') {
-      console.log('Permissão de notificação negada');
-      return null;
-    }
-
     try {
       // Obtém o project ID do expo-constants ou usa um fallback
       const projectId = Constants.expoConfig?.extra?.eas?.projectId || 
@@ -64,13 +73,14 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
       
       // Salva o token no AsyncStorage
       await AsyncStorage.setItem(NOTIFICATION_TOKEN_KEY, token);
-      console.log('Token de notificação registrado:', token);
+      console.log('✅ Token de notificação push registrado:', token);
     } catch (error) {
-      console.error('Erro ao obter token de notificação:', error);
-      return null;
+      console.warn('⚠️ Não foi possível obter token push (normal em emulador):', error);
+      console.log('📱 Notificações locais ainda funcionarão normalmente');
     }
   } else {
-    console.log('Deve usar um dispositivo físico para Push Notifications');
+    console.log('📱 Emulador detectado - notificações locais funcionarão normalmente');
+    console.log('💡 Para push notifications reais, use um dispositivo físico');
   }
 
   return token;
@@ -89,18 +99,27 @@ export async function getNotificationToken(): Promise<string | null> {
 }
 
 /**
- * Envia uma notificação local (para testes)
+ * Envia uma notificação local (funciona em emulador e dispositivo físico)
  */
 export async function scheduleLocalNotification(notification: NotificationData) {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: notification.title,
-      body: notification.body,
-      data: notification.data || {},
-      sound: true,
-    },
-    trigger: null, // null = mostra imediatamente
-  });
+  try {
+    const notificationId = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: notification.title,
+        body: notification.body,
+        data: notification.data || {},
+        sound: true,
+        priority: Notifications.AndroidNotificationPriority.HIGH,
+      },
+      trigger: null, // null = mostra imediatamente
+    });
+    
+    console.log('✅ Notificação local agendada com ID:', notificationId);
+    return notificationId;
+  } catch (error) {
+    console.error('❌ Erro ao agendar notificação local:', error);
+    throw error;
+  }
 }
 
 /**
