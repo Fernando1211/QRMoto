@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { useThemedStyles } from '../../src/context/ThemeContext';
+import { useThemedStyles, useTheme } from '../../src/context/ThemeContext';
+import { useLanguage } from '../../src/context/LanguageContext';
 
 const NUM_ROWS = 10;
 const NUM_COLUMNS = 4;
@@ -18,6 +19,8 @@ const Mapa: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('MANUTENCAO');
   const labels = generateLabels();
   const styles = useThemedStyles(createStyles);
+  const { translations } = useLanguage();
+  const { theme } = useTheme();
 
   const renderItem = ({ item }: { item: string }) => {
     const borderColor = selectedOption === 'MANUTENCAO' ? styles.successBorder : styles.errorBorder;
@@ -35,9 +38,10 @@ const Mapa: React.FC = () => {
         selectedValue={selectedOption}
         onValueChange={(itemValue) => setSelectedOption(itemValue)}
         style={styles.picker}
+        dropdownIconColor={theme.colors.primary}
       >
-        <Picker.Item label="Manutenção" value="MANUTENCAO" />
-        <Picker.Item label="Recuperação" value="RECUPERACAO" />
+        <Picker.Item label={translations.maintenanceStatus} value="MANUTENCAO" color={theme.colors.text} />
+        <Picker.Item label={translations.recoveryStatus} value="RECUPERACAO" color={theme.colors.text} />
       </Picker>
 
       <FlatList

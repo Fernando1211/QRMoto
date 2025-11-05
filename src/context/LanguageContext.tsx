@@ -77,13 +77,73 @@ export interface Translations {
   loading: string;
   confirm: string;
   delete: string;
-  edit: string;
-  save: string;
-  cancel: string;
   close: string;
   back: string;
   next: string;
   done: string;
+  
+  // Alertas e Mensagens
+  attention: string;
+  fillAllFields: string;
+  invalidEmailOrPassword: string;
+  enterEmailForReset: string;
+  emailSent: string;
+  emailSentMessage: string;
+  couldNotSendEmail: string;
+  userNotRegistered: string;
+  enterEmailReset: string;
+  sendEmail: string;
+  modelRequired: string;
+  plateRequired: string;
+  selectStatusRequired: string;
+  motoRegisteredSuccess: string;
+  motoEditedSuccess: string;
+  motoDeletedSuccess: string;
+  errorRegisteringMoto: string;
+  errorEditingMoto: string;
+  errorDeletingMoto: string;
+  requestError: string;
+  checkConnection: string;
+  deleteMotoConfirm: string;
+  deleteMotoConfirmMessage: string;
+  noWingRegistered: string;
+  registerWingFirst: string;
+  errorLoadingWings: string;
+  errorLoadingWingsMessage: string;
+  errorLoadingWingsCheck: string;
+  errorLoadingWingsUrl: string;
+  cache: string;
+  wingsLoadedFromCache: string;
+  noneRegistered: string;
+  reloadWings: string;
+  wingNameRequired: string;
+  wingRegisteredSuccess: string;
+  wingDeletedSuccess: string;
+  errorRegisteringWing: string;
+  errorDeletingWing: string;
+  networkError: string;
+  tryAgain: string;
+  deleteWingConfirm: string;
+  deleteWingConfirmMessage: string;
+  nameField: string;
+  always: string;
+  followSystem: string;
+  developerFullStack: string;
+  developerFrontend: string;
+  developerMobile: string;
+  noUserLogged: string;
+  profileUpdated: string;
+  couldNotSaveChanges: string;
+  emailUpdateWarning: string;
+  emailUpdateWarningMessage: string;
+  maintenanceStatus: string;
+  recoveryStatus: string;
+  modelField: string;
+  positionField: string;
+  problemField: string;
+  plateField: string;
+  statusField: string;
+  wingField: string;
 }
 
 const ptTranslations: Translations = {
@@ -164,6 +224,69 @@ const ptTranslations: Translations = {
   back: 'Voltar',
   next: 'Próximo',
   done: 'Concluído',
+  
+  // Alertas e Mensagens
+  attention: 'Atenção',
+  fillAllFields: 'Preencha todos os campos!',
+  invalidEmailOrPassword: 'Email ou senha inválidos!',
+  enterEmailForReset: 'Digite seu email para redefinir a senha!',
+  emailSent: '📩 Email enviado para redefinir sua senha!',
+  emailSentMessage: 'Email enviado para redefinir sua senha!',
+  couldNotSendEmail: 'Não foi possível enviar o email. Verifique se está correto.',
+  userNotRegistered: 'Usuário não cadastrado.',
+  enterEmailReset: 'Digite seu email para receber o link de redefinição:',
+  sendEmail: 'Enviar Email',
+  modelRequired: 'O campo Modelo é obrigatório',
+  plateRequired: 'O campo Placa é obrigatório',
+  selectStatusRequired: 'Selecione um Status',
+  motoRegisteredSuccess: 'Moto cadastrada com sucesso!',
+  motoEditedSuccess: 'Moto editada com sucesso!',
+  motoDeletedSuccess: 'Moto excluída com sucesso!',
+  errorRegisteringMoto: 'Erro ao cadastrar a moto:',
+  errorEditingMoto: 'Erro ao editar a moto:',
+  errorDeletingMoto: 'Erro ao excluir moto:',
+  requestError: 'Erro na requisição. Verifique sua conexão.',
+  checkConnection: 'Verifique sua conexão.',
+  deleteMotoConfirm: 'Excluir Moto',
+  deleteMotoConfirmMessage: 'Tem certeza que deseja excluir esta moto?',
+  noWingRegistered: 'Nenhuma ala cadastrada',
+  registerWingFirst: 'Cadastre uma ala primeiro.',
+  errorLoadingWings: 'Erro ao Carregar Alas',
+  errorLoadingWingsMessage: 'Não foi possível carregar as alas. Verifique:\n\n1. Se o backend está rodando\n2. Se a URL está correta\n3. Se existe o endpoint /api/alas',
+  errorLoadingWingsCheck: 'Não foi possível carregar as alas.',
+  errorLoadingWingsUrl: 'Se existe o endpoint /api/alas',
+  cache: 'Cache',
+  wingsLoadedFromCache: 'ala(s) carregada(s) do cache',
+  noneRegistered: 'Nenhuma',
+  reloadWings: 'Recarregar Alas',
+  wingNameRequired: 'Preencha o nome da Ala!',
+  wingRegisteredSuccess: 'Ala cadastrada com sucesso!',
+  wingDeletedSuccess: 'Ala excluída com sucesso!',
+  errorRegisteringWing: 'Falha ao cadastrar (status',
+  errorDeletingWing: 'Erro ao excluir (status',
+  networkError: 'Erro de rede.',
+  tryAgain: 'Tente novamente.',
+  deleteWingConfirm: 'Excluir Ala',
+  deleteWingConfirmMessage: 'Tem certeza que deseja excluir esta ala?',
+  nameField: 'Nome:',
+  always: 'Sempre',
+  followSystem: 'segue o sistema',
+  developerFullStack: 'Desenvolvedor Full Stack',
+  developerFrontend: 'Desenvolvedora Frontend',
+  developerMobile: 'Desenvolvedor Mobile',
+  noUserLogged: 'Nenhum usuário logado.',
+  profileUpdated: 'Perfil atualizado.',
+  couldNotSaveChanges: 'Não foi possível salvar as alterações.',
+  emailUpdateWarning: 'Aviso',
+  emailUpdateWarningMessage: 'Não foi possível atualizar o e-mail no Firebase agora (pode exigir reautenticação). O e-mail foi atualizado localmente.',
+  maintenanceStatus: 'Manutenção',
+  recoveryStatus: 'Recuperação',
+  modelField: 'Modelo:',
+  positionField: 'Posição:',
+  problemField: 'Problema:',
+  plateField: 'Placa:',
+  statusField: 'Status:',
+  wingField: 'Ala:',
 };
 
 const enTranslations: Translations = {
@@ -244,6 +367,69 @@ const enTranslations: Translations = {
   back: 'Back',
   next: 'Next',
   done: 'Done',
+  
+  // Alertas e Mensagens
+  attention: 'Attention',
+  fillAllFields: 'Fill all fields!',
+  invalidEmailOrPassword: 'Invalid email or password!',
+  enterEmailForReset: 'Enter your email to reset password!',
+  emailSent: '📩 Email sent to reset your password!',
+  emailSentMessage: 'Email sent to reset your password!',
+  couldNotSendEmail: 'Could not send email. Please check if it is correct.',
+  userNotRegistered: 'User not registered.',
+  enterEmailReset: 'Enter your email to receive the reset link:',
+  sendEmail: 'Send Email',
+  modelRequired: 'Model field is required',
+  plateRequired: 'Plate field is required',
+  selectStatusRequired: 'Select a Status',
+  motoRegisteredSuccess: 'Moto registered successfully!',
+  motoEditedSuccess: 'Moto edited successfully!',
+  motoDeletedSuccess: 'Moto deleted successfully!',
+  errorRegisteringMoto: 'Error registering moto:',
+  errorEditingMoto: 'Error editing moto:',
+  errorDeletingMoto: 'Error deleting moto:',
+  requestError: 'Request error. Check your connection.',
+  checkConnection: 'Check your connection.',
+  deleteMotoConfirm: 'Delete Moto',
+  deleteMotoConfirmMessage: 'Are you sure you want to delete this moto?',
+  noWingRegistered: 'No wing registered',
+  registerWingFirst: 'Register a wing first.',
+  errorLoadingWings: 'Error Loading Wings',
+  errorLoadingWingsMessage: 'Could not load wings. Check:\n\n1. If backend is running\n2. If URL is correct\n3. If /api/wings endpoint exists',
+  errorLoadingWingsCheck: 'Could not load wings.',
+  errorLoadingWingsUrl: 'If /api/wings endpoint exists',
+  cache: 'Cache',
+  wingsLoadedFromCache: 'wing(s) loaded from cache',
+  noneRegistered: 'None',
+  reloadWings: 'Reload Wings',
+  wingNameRequired: 'Fill wing name!',
+  wingRegisteredSuccess: 'Wing registered successfully!',
+  wingDeletedSuccess: 'Wing deleted successfully!',
+  errorRegisteringWing: 'Failed to register (status',
+  errorDeletingWing: 'Error deleting (status',
+  networkError: 'Network error.',
+  tryAgain: 'Try again.',
+  deleteWingConfirm: 'Delete Wing',
+  deleteWingConfirmMessage: 'Are you sure you want to delete this wing?',
+  nameField: 'Name:',
+  always: 'Always',
+  followSystem: 'follows system',
+  developerFullStack: 'Full Stack Developer',
+  developerFrontend: 'Frontend Developer',
+  developerMobile: 'Mobile Developer',
+  noUserLogged: 'No user logged in.',
+  profileUpdated: 'Profile updated.',
+  couldNotSaveChanges: 'Could not save changes.',
+  emailUpdateWarning: 'Warning',
+  emailUpdateWarningMessage: 'Could not update email in Firebase now (may require re-authentication). Email was updated locally.',
+  maintenanceStatus: 'Maintenance',
+  recoveryStatus: 'Recovery',
+  modelField: 'Model:',
+  positionField: 'Position:',
+  problemField: 'Problem:',
+  plateField: 'Plate:',
+  statusField: 'Status:',
+  wingField: 'Wing:',
 };
 
 type LanguageContextType = {

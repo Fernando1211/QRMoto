@@ -44,14 +44,14 @@ export default function CadastroAla() {
       setAlas(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error('Erro ao carregar alas', err);
-      Alert.alert('Erro', 'Não foi possível carregar as alas.');
+      Alert.alert(translations.error, translations.errorLoadingWingsCheck);
     }
   };
 
   // Função para cadastrar nova Ala
   const handleCadastroAla = async () => {
     if (!ala.nome) {
-      Alert.alert('Atenção', 'Preencha o nome da Ala!');
+      Alert.alert(translations.attention, translations.wingNameRequired);
       return;
     }
 
@@ -63,17 +63,17 @@ export default function CadastroAla() {
       });
 
       if (response.status === 201) {
-        Alert.alert('Sucesso', 'Ala cadastrada com sucesso!');
+        Alert.alert(translations.success, translations.wingRegisteredSuccess);
         carregarAlas();
         setAla({ nome: '' });
       } else {
         const text = await response.text();
         console.error('Erro ao cadastrar:', response.status, text);
-        Alert.alert('Erro', `Falha ao cadastrar (status ${response.status})`);
+        Alert.alert(translations.error, `${translations.errorRegisteringWing} ${response.status})`);
       }
     } catch (error) {
       console.error('Erro ao cadastrar a ala:', error);
-      Alert.alert('Erro', 'Erro de rede. Tente novamente.');
+      Alert.alert(translations.error, `${translations.networkError} ${translations.tryAgain}`);
     }
   };
 
@@ -91,16 +91,16 @@ export default function CadastroAla() {
       });
 
       if (response.ok) {
-        Alert.alert('Sucesso', 'Ala excluída com sucesso!');
+        Alert.alert(translations.success, translations.wingDeletedSuccess);
         setAlas(alas.filter((ala) => ala.id !== id));
       } else {
         const text = await response.text();
         console.error('Erro ao excluir:', response.status, text);
-        Alert.alert('Erro', `Erro ao excluir (status ${response.status})`);
+        Alert.alert(translations.error, `${translations.errorDeletingWing} ${response.status})`);
       }
     } catch (error) {
       console.error('Erro ao excluir ala:', error);
-      Alert.alert('Erro', 'Erro de rede ao excluir.');
+      Alert.alert(translations.error, `${translations.networkError} ${translations.delete.toLowerCase()}.`);
     }
   };
 
@@ -132,7 +132,7 @@ export default function CadastroAla() {
         )}
         {alas.map((alaItem, index) => (
           <View key={alaItem.id ?? index} style={{ marginBottom: 12 }}>
-            <Text style={styles.previewText}>Nome: {alaItem.nome}</Text>
+            <Text style={styles.previewText}>{translations.nameField} {alaItem.nome}</Text>
             <View style={{ flexDirection: 'row', gap: 8, marginTop: 6 }}>
               <TouchableOpacity style={styles.editButton}>
                 <Text style={{ color: theme.colors.text }}>{translations.edit}</Text>
@@ -140,8 +140,8 @@ export default function CadastroAla() {
               <TouchableOpacity
                 onPress={() =>
                   Alert.alert(
-                    'Excluir Ala',
-                    'Tem certeza que deseja excluir esta ala?',
+                    translations.deleteWingConfirm,
+                    translations.deleteWingConfirmMessage,
                     [
                       { text: translations.cancel, style: 'cancel' },
                       { text: translations.delete, onPress: () => excluirAla(alaItem.id), style: 'destructive' },

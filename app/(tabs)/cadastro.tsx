@@ -107,16 +107,13 @@ export default function Cadastro() {
       await AsyncStorage.setItem('alas', JSON.stringify(listaAlas));
 
       if (listaAlas.length === 0) {
-        Alert.alert('Aviso', 'Nenhuma ala cadastrada. Cadastre uma ala primeiro.');
+        Alert.alert(translations.warning, `${translations.noWingRegistered}. ${translations.registerWingFirst}`);
       }
     } catch (error) {
       console.error('❌ Erro ao carregar alas:', error);
       Alert.alert(
-        'Erro ao Carregar Alas', 
-        'Não foi possível carregar as alas. Verifique:\n\n' +
-        '1. Se o backend está rodando\n' +
-        '2. Se a URL está correta\n' +
-        '3. Se existe o endpoint /api/alas'
+        translations.errorLoadingWings, 
+        translations.errorLoadingWingsMessage
       );
       
       // Tenta carregar do cache
@@ -125,7 +122,7 @@ export default function Cadastro() {
         if (cached) {
           const cachedAlas = JSON.parse(cached);
           setAlas(cachedAlas);
-          Alert.alert('Cache', `${cachedAlas.length} ala(s) carregada(s) do cache`);
+          Alert.alert(translations.cache, `${cachedAlas.length} ${translations.wingsLoadedFromCache}`);
         }
       } catch (e) {
         console.error('Erro ao carregar cache:', e);
@@ -202,15 +199,15 @@ export default function Cadastro() {
 
   const validarCampos = (): boolean => {
     if (!moto.modelo.trim()) {
-      Alert.alert('Erro', 'O campo Modelo é obrigatório');
+      Alert.alert(translations.error, translations.modelRequired);
       return false;
     }
     if (!moto.placa.trim()) {
-      Alert.alert('Erro', 'O campo Placa é obrigatório');
+      Alert.alert(translations.error, translations.plateRequired);
       return false;
     }
     if (!moto.status) {
-      Alert.alert('Erro', 'Selecione um Status');
+      Alert.alert(translations.error, translations.selectStatusRequired);
       return false;
     }
     return true;
@@ -238,17 +235,24 @@ export default function Cadastro() {
         const motoRetornada = await response.json();
         console.log('✅ Moto retornada pelo backend:', JSON.stringify(motoRetornada, null, 2));
         
-        Alert.alert('Sucesso', 'Moto cadastrada com sucesso!');
+        // Envia notificação push quando uma moto é cadastrada
+        const { notifyMotoRegistered } = await import('../../service/notificationService');
+        await notifyMotoRegistered({
+          modelo: moto.modelo,
+          placa: moto.placa,
+        });
+        
+        Alert.alert(translations.success, translations.motoRegisteredSuccess);
         limparCampos();
         await listarMotos();
       } else {
         const text = await response.text();
         console.error('Erro ao cadastrar:', text);
-        Alert.alert('Erro', `Erro ao cadastrar a moto: ${text}`);
+        Alert.alert(translations.error, `${translations.errorRegisteringMoto} ${text}`);
       }
     } catch (error) {
       console.error('❌ Erro ao cadastrar moto:', error);
-      Alert.alert('Erro', 'Erro na requisição. Verifique sua conexão.');
+      Alert.alert(translations.error, translations.requestError);
     }
   };
 
@@ -266,16 +270,27 @@ export default function Cadastro() {
       });
 
       if (response.ok) {
-        Alert.alert('Sucesso', 'Moto editada com sucesso!');
+        // Envia notificação quando status muda
+        const oldMoto = listaMotos.find(m => m.id === motoEditada.id);
+        if (oldMoto && oldMoto.status !== motoEditada.status) {
+          const { notifyMotoStatusChanged } = await import('../../service/notificationService');
+          await notifyMotoStatusChanged(
+            { modelo: motoEditada.modelo, placa: motoEditada.placa },
+            oldMoto.status,
+            motoEditada.status
+          );
+        }
+        
+        Alert.alert(translations.success, translations.motoEditedSuccess);
         await listarMotos();
         limparCampos();
       } else {
         const text = await response.text();
-        Alert.alert('Erro', `Erro ao editar a moto: ${text}`);
+        Alert.alert(translations.error, `${translations.errorEditingMoto} ${text}`);
       }
     } catch (error) {
       console.error('❌ Erro ao editar moto:', error);
-      Alert.alert('Erro', 'Erro na requisição. Verifique sua conexão.');
+      Alert.alert(translations.error, translations.requestError);
     }
   };
 
@@ -290,15 +305,15 @@ export default function Cadastro() {
       });
 
       if (response.ok) {
-        Alert.alert('Sucesso', 'Moto excluída com sucesso!');
+        Alert.alert(translations.success, translations.motoDeletedSuccess);
         await listarMotos();
       } else {
         const text = await response.text();
-        Alert.alert('Erro', `Erro ao excluir moto: ${text}`);
+        Alert.alert(translations.error, `${translations.errorDeletingMoto} ${text}`);
       }
     } catch (error) {
       console.error('❌ Erro ao excluir moto:', error);
-      Alert.alert('Erro', 'Erro na requisição. Verifique sua conexão.');
+      Alert.alert(translations.error, translations.requestError);
     }
   };
 
@@ -377,13 +392,13 @@ export default function Cadastro() {
       {alas.length === 0 && !loadingAlas && (
         <View style={styles.warningBox}>
           <MaterialIcons name="warning" size={20} color="#FFA500" />
-          <Text style={styles.warningText}>Nenhuma ala cadastrada</Text>
+          <Text style={styles.warningText}>{translations.noWingRegistered}</Text>
         </View>
       )}
 
       {/* Mostra quantas alas foram carregadas */}
       {alas.length > 0 && (
-        <Text style={styles.infoText}>✅ {alas.length} ala(s) disponível(is)</Text>
+        <Text style={styles.infoText}>✅ {alas.length} {translations.wing}(s) {translations.available.toLowerCase()}</Text>
       )}
 
       {/* Botão para recarregar alas */}
@@ -394,7 +409,7 @@ export default function Cadastro() {
       >
         <MaterialIcons name="refresh" size={18} color="#fff" />
         <Text style={styles.refreshButtonText}>
-          {loadingAlas ? 'Carregando...' : 'Recarregar Alas'}
+          {loadingAlas ? translations.loading : translations.reloadWings}
         </Text>
       </TouchableOpacity>
 
@@ -423,12 +438,11 @@ export default function Cadastro() {
           ) : (
             listaMotos.map((m, index) => (
               <View key={m.id ?? index} style={styles.motoCard}>
-                {CAMPOS_FORM.map((field) => (
-                  <Text key={field} style={styles.previewText}>
-                    {`${field[0].toUpperCase() + field.slice(1)}: ${m[field] || '---'}`}
-                  </Text>
-                ))}
-                <Text style={styles.previewText}>Status: {m.status}</Text>
+                <Text style={styles.previewText}>{translations.modelField} {m.modelo || '---'}</Text>
+                <Text style={styles.previewText}>{translations.positionField} {m.posicao || '---'}</Text>
+                <Text style={styles.previewText}>{translations.problemField} {m.problema || '---'}</Text>
+                <Text style={styles.previewText}>{translations.plateField} {m.placa || '---'}</Text>
+                <Text style={styles.previewText}>{translations.statusField} {m.status}</Text>
 
                 <View style={styles.actionsRow}>
                   <TouchableOpacity 
@@ -446,7 +460,7 @@ export default function Cadastro() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
-                      Alert.alert('Excluir Moto', 'Tem certeza que deseja excluir esta moto?', [
+                      Alert.alert(translations.deleteMotoConfirm, translations.deleteMotoConfirmMessage, [
                         { text: translations.cancel, style: 'cancel' },
                         { text: translations.delete, onPress: () => excluirMoto(m.id), style: 'destructive' },
                       ])

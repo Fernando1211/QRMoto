@@ -122,7 +122,7 @@ export default function LogoutScreen() {
   const saveEdit = async () => {
     if (!profile) return;
     if (!nameInput.trim() || !emailInput.trim()) {
-      Alert.alert("Atenção", "Preencha nome e e-mail.");
+      Alert.alert(translations.attention, translations.fillAllFields);
       return;
     }
 
@@ -142,8 +142,8 @@ export default function LogoutScreen() {
         } catch (err: any) {
           console.log("Falha ao atualizar e-mail no Auth:", err?.code || err?.message || err);
           Alert.alert(
-            "Aviso",
-            "Não foi possível atualizar o e-mail no Firebase agora (pode exigir reautenticação). O e-mail foi atualizado localmente."
+            translations.emailUpdateWarning,
+            translations.emailUpdateWarningMessage
           );
         }
       }
@@ -168,10 +168,10 @@ export default function LogoutScreen() {
       await AsyncStorage.setItem("@user", JSON.stringify(toStore));
       setProfile(updatedLocal);
       setEditing(false);
-      Alert.alert("Sucesso", "Perfil atualizado.");
+      Alert.alert(translations.success, translations.profileUpdated);
     } catch (e) {
       console.log("Erro ao salvar edição:", e);
-      Alert.alert("Erro", "Não foi possível salvar as alterações.");
+      Alert.alert(translations.error, translations.couldNotSaveChanges);
     }
   };
 
@@ -211,7 +211,7 @@ export default function LogoutScreen() {
         </View>
       ) : (
         <Text style={{ color: theme.colors.textSecondary, textAlign: "center" }}>
-          Nenhum usuário logado.
+          {translations.noUserLogged}
         </Text>
       )}
 
@@ -248,7 +248,7 @@ export default function LogoutScreen() {
             </View>
 
             <Text style={styles.hint}>
-              * Atualizar e-mail no Firebase pode exigir reautenticação. Caso falhe, o app mantém a mudança local.
+              * {translations.emailUpdateWarningMessage}
             </Text>
           </View>
         </View>

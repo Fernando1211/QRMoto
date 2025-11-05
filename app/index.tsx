@@ -44,7 +44,7 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     if (!email || !senha) {
-      Alert.alert('Atenção', 'Preencha todos os campos!');
+      Alert.alert(translations.attention, translations.fillAllFields);
       return;
     }
 
@@ -56,29 +56,29 @@ export default function LoginScreen() {
       })
       .catch((error) => {
         console.log('Error:', error.message);
-        Alert.alert('Erro', 'Email ou senha inválidos!');
+        Alert.alert(translations.error, translations.invalidEmailOrPassword);
       });
   };
 
   const handleResetSenha = async () => {
     if (!emailReset) {
-      Alert.alert('Atenção', 'Digite seu email para redefinir a senha!');
+      Alert.alert(translations.attention, translations.enterEmailForReset);
       return;
     }
     try {
       await sendPasswordResetEmail(auth, emailReset);
-      Alert.alert('Sucesso', '📩 Email enviado para redefinir sua senha!');
+      Alert.alert(translations.success, translations.emailSent);
       setEmailReset('');
       setModalVisible(false);
     } catch (error) {
       console.error(error);
-      Alert.alert('Erro', 'Não foi possível enviar o email. Verifique se está correto.');
+      Alert.alert(translations.error, translations.couldNotSendEmail);
     }
   };
 
   const handleCadastro = () => {
     if (!nome || !emailCadastro || !senhaCadastro) {
-      Alert.alert('Atenção', 'Preencha todos os campos!');
+      Alert.alert(translations.attention, translations.fillAllFields);
       return;
     }
 
@@ -98,7 +98,7 @@ export default function LoginScreen() {
       })
       .catch((error) => {
         console.log(error.message);
-        Alert.alert('Erro', 'Usuário não cadastrado.');
+        Alert.alert(translations.error, translations.userNotRegistered);
       });
   };
 
@@ -167,7 +167,7 @@ export default function LoginScreen() {
           <View style={styles.box}>
             <Text style={styles.tituloModal}>🔑 {translations.forgotPassword}</Text>
             <Text style={styles.subtituloModal}>
-              Digite seu email para receber o link de redefinição:
+              {translations.enterEmailReset}
             </Text>
 
             <TextInput
@@ -181,7 +181,7 @@ export default function LoginScreen() {
             />
 
             <TouchableOpacity style={styles.botao} onPress={handleResetSenha}>
-              <Text style={styles.textoBotao}>Enviar Email</Text>
+              <Text style={styles.textoBotao}>{translations.sendEmail}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

@@ -36,10 +36,10 @@ export default function Configuracoes() {
               <Text style={styles.settingLabel}>{translations.darkMode}</Text>
               <Text style={styles.settingDescription}>
                 {theme.mode === 'auto' 
-                  ? `${translations.automatic} (segue o sistema)` 
+                  ? `${translations.automatic} (${translations.followSystem})` 
                   : theme.mode === 'dark' 
-                    ? `Sempre ${translations.dark.toLowerCase()}` 
-                    : `Sempre ${translations.light.toLowerCase()}`
+                    ? `${translations.always} ${translations.dark.toLowerCase()}` 
+                    : `${translations.always} ${translations.light.toLowerCase()}`
                 }
               </Text>
             </View>
@@ -146,7 +146,7 @@ export default function Configuracoes() {
         <Text style={styles.sectionTitle}>📱 {translations.about}</Text>
         
         <View style={styles.infoItem}>
-          <Text style={styles.infoLabel}>Nome:</Text>
+          <Text style={styles.infoLabel}>{translations.nameField}</Text>
           <Text style={styles.infoValue}>{translations.appName}</Text>
         </View>
         
@@ -169,17 +169,17 @@ export default function Configuracoes() {
         
         <View style={styles.devItem}>
           <Text style={styles.devName}>Fernando Aguiar</Text>
-          <Text style={styles.devRole}>Desenvolvedor Full Stack</Text>
+          <Text style={styles.devRole}>{translations.developerFullStack}</Text>
         </View>
         
         <View style={styles.devItem}>
           <Text style={styles.devName}>Gabriela Macedo</Text>
-          <Text style={styles.devRole}>Desenvolvedora Frontend</Text>
+          <Text style={styles.devRole}>{translations.developerFrontend}</Text>
         </View>
         
         <View style={styles.devItem}>
           <Text style={styles.devName}>Rafael Mocoto</Text>
-          <Text style={styles.devRole}>Desenvolvedor Mobile</Text>
+          <Text style={styles.devRole}>{translations.developerMobile}</Text>
         </View>
       </View>
     </ScrollView>
