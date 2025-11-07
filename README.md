@@ -156,7 +156,7 @@ QRMoto/
 │       ├── 🎨 ThemeContext.tsx     # Contexto de tema
 │       └── 🌐 LanguageContext.tsx  # Contexto de idioma
 ├── 🔧 service/                     # Serviços externos
-│   └── 🔥 firebaseConfig.tsx       # Configuração do Firebase
+│   └── 🔥 firebaseConfig.tsx       # Configuração do Firebase (Auth)
 ├── 🎨 assets/                      # Imagens e recursos
 │   ├── 🖼️ icon.png                # Ícone do app
 │   ├── 🖼️ splash-icon.png         # Ícone de splash
@@ -349,11 +349,6 @@ expo build:ios
 - ✅ Configurado para Firebase App Distribution
 - ✅ Tela "Sobre o App" com informações
 - ✅ Estrutura preparada para publicação
-
-### ✅ **Notificação via Push (10 pontos)**
-![Push Notifications](https://img.shields.io/badge/🔄-10/10-blue?style=flat-square)
-- 🔄 Estrutura preparada para implementação
-- 🔄 Configuração Firebase pronta
 
 ### ✅ **Integração com API (10 pontos)**
 ![API Integration](https://img.shields.io/badge/✅-10/10-success?style=flat-square)

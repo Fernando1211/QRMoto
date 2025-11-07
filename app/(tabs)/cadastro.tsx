@@ -235,13 +235,6 @@ export default function Cadastro() {
         const motoRetornada = await response.json();
         console.log('✅ Moto retornada pelo backend:', JSON.stringify(motoRetornada, null, 2));
         
-        // Envia notificação push quando uma moto é cadastrada
-        const { notifyMotoRegistered } = await import('../../service/notificationService');
-        await notifyMotoRegistered({
-          modelo: moto.modelo,
-          placa: moto.placa,
-        });
-        
         Alert.alert(translations.success, translations.motoRegisteredSuccess);
         limparCampos();
         await listarMotos();
@@ -270,17 +263,6 @@ export default function Cadastro() {
       });
 
       if (response.ok) {
-        // Envia notificação quando status muda
-        const oldMoto = listaMotos.find(m => m.id === motoEditada.id);
-        if (oldMoto && oldMoto.status !== motoEditada.status) {
-          const { notifyMotoStatusChanged } = await import('../../service/notificationService');
-          await notifyMotoStatusChanged(
-            { modelo: motoEditada.modelo, placa: motoEditada.placa },
-            oldMoto.status,
-            motoEditada.status
-          );
-        }
-        
         Alert.alert(translations.success, translations.motoEditedSuccess);
         await listarMotos();
         limparCampos();

@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3ILU20b2omSdsWVre7GdkPsyvVzbWaXo",
@@ -17,6 +16,3 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 export const auth = getAuth(app);
-
-// Firebase Cloud Messaging (para web - em produção mobile usamos expo-notifications)
-export const messaging = typeof window !== 'undefined' ? getMessaging(app) : null;
