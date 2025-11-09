@@ -340,11 +340,11 @@ export default function Cadastro() {
           dropdownIconColor={theme.colors.primary}
           style={styles.picker}
         >
-          <Picker.Item label={translations.selectStatus} value="" color={theme.colors.textSecondary} />
-          <Picker.Item label={translations.available} value="DISPONIVEL" color={theme.colors.text} />
-          <Picker.Item label={translations.maintenance} value="MANUTENCAO" color={theme.colors.text} />
-          <Picker.Item label={translations.unavailable} value="INDISPONIVEL" color={theme.colors.text} />
-          <Picker.Item label={translations.recovery} value="RECUPERACAO" color={theme.colors.text} />
+          <Picker.Item label={translations.selectStatus} value="" color="#000000" />
+          <Picker.Item label={translations.available} value="DISPONIVEL" color="#000000" />
+          <Picker.Item label={translations.maintenance} value="MANUTENCAO" color="#000000" />
+          <Picker.Item label={translations.unavailable} value="INDISPONIVEL" color="#000000" />
+          <Picker.Item label={translations.recovery} value="RECUPERACAO" color="#000000" />
         </Picker>
       </View>
 
@@ -352,7 +352,7 @@ export default function Cadastro() {
       <View style={styles.pickerContainer}>
         {loadingAlas ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color={theme.colors.primary} />
+            <ActivityIndicator size="small" color="#000000" />
             <Text style={styles.loadingText}>{translations.loading}</Text>
           </View>
         ) : (
@@ -364,7 +364,7 @@ export default function Cadastro() {
           >
             <Picker.Item label={translations.selectWing} value={undefined} color={theme.colors.textSecondary} />
             {alas.map((ala) => (
-              <Picker.Item key={ala.id} label={ala.nome} value={ala.id} color={theme.colors.text} />
+              <Picker.Item key={ala.id} label={ala.nome} value={ala.id} color="#000000" />
             ))}
           </Picker>
         )}
