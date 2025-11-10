@@ -111,25 +111,6 @@ O **QRMoto** é um aplicativo mobile desenvolvido em React Native para gestão c
 - 📱 **Informações do App**
 - 👨‍💻 **Perfil dos Desenvolvedores**
 
----
-
-## 📱 Screenshots
-
-<div align="center">
-
-### 🔐 Tela de Login
-![Login Screen](https://via.placeholder.com/300x600/1a1a1a/00BFFF?text=Login+Screen)
-
-### 🏍️ Cadastro de Motos
-![Moto Registration](https://via.placeholder.com/300x600/1a1a1a/00BFFF?text=Moto+Registration)
-
-### 🗺️ Mapa de Localização
-![Location Map](https://via.placeholder.com/300x600/1a1a1a/00BFFF?text=Location+Map)
-
-### ⚙️ Configurações
-![Settings](https://via.placeholder.com/300x600/1a1a1a/00BFFF?text=Settings)
-
-</div>
 
 ---
 
