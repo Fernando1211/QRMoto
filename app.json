@@ -20,11 +20,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
-    },
-    "edgeToEdgeEnabled": true,
-    "useNextNotificationsApi": true,
-    "package": "com.fernando1211.QRMoto"
+       },
+      "edgeToEdgeEnabled": true,
+      "useNextNotificationsApi": true,
+      "package": "com.fernando1211.QRMoto"    
     },
        "web": {
       "favicon": "./assets/favicon.png"
