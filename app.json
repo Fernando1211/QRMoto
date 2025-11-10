@@ -26,8 +26,7 @@
     "useNextNotificationsApi": true,
     "package": "com.fernando1211.QRMoto"
     },
-   
-    "web": {
+       "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
@@ -35,4 +34,4 @@
       "expo-barcode-scanner"
     ]
   }
-}
+
