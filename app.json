@@ -22,6 +22,11 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "edgeToEdgeEnabled": true,
+    "useNextNotificationsApi": true,
+    "package": "com.fernando1211.QRMoto"
+    },
+   
     "web": {
       "favicon": "./assets/favicon.png"
     },
